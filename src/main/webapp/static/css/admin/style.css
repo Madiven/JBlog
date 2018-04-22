@@ -1,0 +1,76 @@
+body{
+    background: url("../../images/1.jpg");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    animation-name:myfirst;
+    animation-duration:12s;
+    /*变换时间*/
+    animation-delay:2s;
+    /*动画开始时间*/
+    animation-iteration-count:infinite;
+    /*下一周期循环播放*/
+    animation-play-state:running;
+    /*动画开始运行*/
+}
+@keyframes myfirst
+{
+    0%
+    {
+        background:url("../../images/1.jpg");
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    34%
+    {
+        background:url("../../images/2.jpg");
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    67%
+    {
+        background:url("../../images/3.jpg");
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    100%
+    {
+        background:url("../../images/1.jpg");
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+}
+.form{background: rgba(255,255,255,0.2);width:400px;margin:120px auto;}
+/*阴影*/
+.fa{display: inline-block;top: 27px;left: 6px;position: relative;color: #ffffff;}
+input[type="text"],input[type="password"]{padding-left:26px;}
+.checkbox{padding-left:21px;}
+
+.error-mess {
+    clear: both;
+    background: #fff0f0;
+    border: 1px solid #ffd2d2;
+    height: 26px;
+    line-height: 26px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    color: #b74d46;
+    /*width: 100%;*/
+}
+.error-icon {
+    display: inline-block;
+    background: url("../../images/login-logic-icons.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin: -4px 5px 0 5px;
+}

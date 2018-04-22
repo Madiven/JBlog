@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--<aop:aspectj-autoproxy />声明自动为spring容器中那些配置@aspectJ切面的bean创建代理，织入切面
+		poxy-target-class默认为false，表示使用jdk动态代理织入增强,为true表示使用CGLib动态代理技术织入增强
+	-->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- 事务控制 -->
+       <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+             <property name="dataSource" ref="dataSource"></property>
+       </bean>
+       <!-- 通知  -->
+       <tx:advice id="txAdvice" transaction-manager="txManager">
+             <tx:attributes>
+                 <tx:method name="insert*" propagation="REQUIRED" />
+                 <tx:method name="update*" propagation="REQUIRED" />
+                 <tx:method name="edit*" propagation="REQUIRED" />
+                 <tx:method name="save*" propagation="REQUIRED" />
+                 <tx:method name="add*" propagation="REQUIRED" />
+                 <tx:method name="new*" propagation="REQUIRED" />
+                 <tx:method name="set*" propagation="REQUIRED" />
+                 <tx:method name="remove*" propagation="REQUIRED" />
+                 <tx:method name="delete*" propagation="REQUIRED" />
+                 <tx:method name="change*" propagation="REQUIRED" />
+                 <tx:method name="check*" propagation="REQUIRED" />
+                 <tx:method name="get*" propagation="REQUIRED" read-only="true" />
+                 <tx:method name="find*" propagation="REQUIRED" read-only="true" />
+                 <tx:method name="load*" propagation="REQUIRED" read-only="true" />
+             </tx:attributes>
+       </tx:advice>
+       <!-- aop -->
+       <aop:config>
+             <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.jblog.service..*.*(..))"/>
+       </aop:config>
+
+    <bean id="managerControllerAop" class="com.jblog.common.aspect.ManagerControllerAop"></bean>
+
+    <aop:config>
+        <aop:aspect id="managerAop" ref="managerControllerAop">
+            <aop:pointcut id="target" expression="execution(public com.jblog.common.bean.EasyUIResult *(..))" />
+            <aop:around method="handlerControllerMethod" pointcut-ref="target" />
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="controllerAop" class="com.jblog.common.aspect.ControllerAop"></bean>
+
+    <aop:config>
+        <aop:aspect id="aop" ref="controllerAop">
+            <aop:pointcut id="target" expression="execution(public com.jblog.common.bean.Result *(..))" />
+            <aop:around method="handlerControllerMethod" pointcut-ref="target" />
+        </aop:aspect>
+    </aop:config>
+
+</beans>

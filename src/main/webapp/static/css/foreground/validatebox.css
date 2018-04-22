@@ -1,0 +1,204 @@
+ol {
+    list-style:none
+}
+.theme-popbod input[type="submit"] {
+    cursor:pointer;
+    -webkit-appearance:button
+}
+/*window*/
+
+
+/* input */
+.ipt {
+    float: left;
+    margin-left: 5px;
+    margin-top: -20px;
+    border: solid 1px #d2d2d2;
+    border-left-color: #ccc;
+    border-top-color: #ccc;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 0 #f8f8f8;
+    background-color: #fff;
+    padding: 4px 6px;
+    height: 25px;
+    line-height: 21px;
+    color: #555;
+    width: 130px;
+    vertical-align: baseline;
+}
+.ipt:focus {
+    border-color: #95C8F1;
+    box-shadow: 0 0 4px #95C8F1;
+}
+/* btn */
+.btn-primary {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    font-weight: bold;
+    height: 27px;
+    line-height: 27px;
+    min-width: 52px;
+    padding: 0 12px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+    border-color: #3079ED;
+    color: #F3F7FC;
+    background-color: #4D90FE;
+    background: -webkit-linear-gradient(top, #4D90FE, #4787ED);
+    background: -moz-linear-gradient(top, #4D90FE, #4787ED);
+    background: linear-gradient(top, #4D90FE, #4787ED);
+}
+input.btn-primary {
+    margin-left: 5px;
+    float: left;
+    margin-top: 10px;
+    height: 29px;
+    margin-right: 100px;
+}
+.btn-primary:hover {
+    box-shadow:#ddd 0 1px 1px 0;
+    border-color:#2F5BB7;
+    color:#fff;
+    background-color: #4D90FE;
+    background: -webkit-linear-gradient(top, #4D90FE, #357AE8);
+    background: -moz-linear-gradient(top, #4D90FE, #357AE8);
+    background: linear-gradient(top, #4D90FE, #357AE8);
+}
+.btn-primary:active {
+    box-shadow:#2176D3 0 1px 2px 0 inset;
+    border-color: #3079ED;
+}
+.btn-primary:focus {
+    border-color:#4d90fe;
+    outline:none
+}
+.theme-popover-mask {
+    z-index: 9998;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    opacity:0.4;
+    filter:alpha(opacity=40);
+    display:none
+}
+.theme-popover {
+    z-index:9999;
+    position:fixed;
+    top:50%;
+    left:50%;
+    width:330px;
+    height:180px;
+    margin:-180px 0 0 -167px;
+    border-radius:5px;
+    border:solid 2px #666;
+    background-color:#fff;
+    display:none;
+    box-shadow: 0 0 10px #666;
+}
+.theme-poptit {
+    border-bottom:1px solid #ddd;
+    padding:12px;
+    position: relative;
+}
+.theme-popbod {
+    padding:60px 15px;
+    color:#444;
+    height: 148px;
+}
+.theme-poptit .close {
+    float:right;
+    color:#999;
+    padding:5px;
+    margin:-2px -5px -5px;
+    font:bold 14px/14px simsun;
+    text-shadow:0 1px 0 #ddd
+}
+.theme-poptit .close:hover {
+    color:#444;
+}
+.dform {
+    padding:50px 10px 20px 20px;
+    text-align: center;
+}
+.dform ol a {
+    cursor:pointer;
+    -webkit-appearance:button;
+}
+
+.dform ol a {
+    margin-top: -20px;
+    float: left;
+    margin-left: 17px;
+}
+
+.dform ol span {
+    float: left;
+    margin-top: 19px;
+    color: red;
+    font-size: 18px;
+    margin-left: 3px;
+}
+
+.result-popover-mask {
+    z-index: 9998;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    opacity:0.4;
+    filter:alpha(opacity=40);
+    display:none
+}
+.result-popover {
+    z-index:9999;
+    position:fixed;
+    top:50%;
+    left:50%;
+    width:330px;
+    height:180px;
+    margin:-180px 0 0 -167px;
+    border-radius:5px;
+    border:solid 2px #666;
+    background-color:#fff;
+    display:none;
+    box-shadow: 0 0 10px #666;
+}
+.result-poptit {
+    border-bottom:1px solid #ddd;
+    padding:12px;
+    position: relative;
+}
+.result-popbod {
+    padding:60px 15px;
+    color:#444;
+    height: 148px;
+}
+.result-poptit .close {
+    float:right;
+    color:#999;
+    padding:5px;
+    margin:-2px -5px -5px;
+    font:bold 14px/14px simsun;
+    text-shadow:0 1px 0 #ddd
+}
+.result-poptit .close:hover {
+    color:#444;
+}
+.rform {
+    padding:55px 10px 20px 20px;
+    text-align: center;
+}
+.rform span {
+    color: red;
+    font-size: 18px;
+}

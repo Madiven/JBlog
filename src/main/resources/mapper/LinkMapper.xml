@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jblog.dao.LinkDao">
+
+    <resultMap type="Link" id="LinkResult">
+        <id property="id" column="id"/>
+        <result property="linkName" column="linkName"/>
+        <result property="linkUrl" column="linkUrl"/>
+        <result property="orderNum" column="orderNum"/>
+    </resultMap>
+
+    <select id="listLinkData" resultMap="LinkResult">
+        SELECT * FROM t_link ORDER BY orderNum
+    </select>
+
+    <insert id="addLink" parameterType="Link">
+        INSERT INTO t_link VALUES(null,#{linkName},#{linkUrl},#{orderNum})
+    </insert>
+
+    <delete id="deleteLink">
+        delete from t_link where id IN
+        <foreach item="id" index="index" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateLink" parameterType="Link">
+        update t_link
+        <set>
+            <if test="linkName!=null and linkName!=''">
+                linkName=#{linkName},
+            </if>
+            <if test="linkUrl!=null and linkUrl!=''">
+                linkUrl=#{linkUrl},
+            </if>
+            <if test="orderNum!=null">
+                orderNum=#{orderNum},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

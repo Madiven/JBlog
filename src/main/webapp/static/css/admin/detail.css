@@ -1,0 +1,108 @@
+*{
+    padding: 0px;
+}
+a {
+    outline: none;
+}
+.ibody {
+    width: 1200px;
+    margin: auto;
+    box-shadow: -2px -1px 5px #666;
+}
+article {  float: left;  }
+.index_about { margin: 20px }
+.box_c { color: #999; text-align: center }
+.box_c span { margin: 0 10px; }
+.box_c span a { color: #099; }
+.keybq { background: url(../../images/6264.png) no-repeat 10px center #F8F8F8; line-height: 0px; height: 30px; padding-left: 40px; border: 1px solid #F0F0F0; margin: 20px 0; }
+.keybq span { color: #099 }
+ul.infos { overflow: hidden; margin: 20px 0; line-height: 28px; font-size: 14px; text-indent: 2em; color: #525554 }
+ul.infos p { margin-bottom: 10px }
+ul.infos p img { display: block; margin: auto }
+.c_titile { font-size: 22px; margin: 20px 0; text-align: center; font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif; }
+.ico_type_Original {
+    background-image: url("../../images/skin-type-icon.png");
+    background-repeat: no-repeat;
+    background-position: 0px 0;
+}
+
+.ico_type_Translated {
+    background-image: url("../../images/skin-type-icon.png");
+    background-repeat: no-repeat;
+    background-position: -25px 0;
+}
+
+.ico_type_Repost {
+    background-image: url("../../images/skin-type-icon.png");
+    background-repeat: no-repeat;
+    background-position: -50px 0px;
+}
+
+.ico {
+    display: inline-block;
+    vertical-align: middle;
+    width: 19px;
+    height: 19px;
+    margin-right: 1px;
+    margin-top: -4px;
+}
+.commentform h3 {
+    margin: 0px;
+    font-size: 100%;
+    font-weight: normal;
+}
+.result-popover-mask {
+    z-index: 9998;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    opacity:0.4;
+    filter:alpha(opacity=40);
+    display:none
+}
+.result-popover {
+    z-index:9999;
+    position:fixed;
+    top:50%;
+    left:50%;
+    width:330px;
+    height:180px;
+    margin:-180px 0 0 -167px;
+    border-radius:5px;
+    border:solid 2px #666;
+    background-color:#fff;
+    display:none;
+    box-shadow: 0 0 10px #666;
+}
+.result-poptit {
+    border-bottom:1px solid #ddd;
+    padding:12px;
+    position: relative;
+}
+.result-popbod {
+    padding:60px 15px;
+    color:#444;
+    height: 148px;
+}
+.result-poptit .close {
+    float:right;
+    color:#999;
+    padding:5px;
+    margin:-2px -5px -5px;
+    font:bold 14px/14px simsun;
+    text-shadow:0 1px 0 #ddd
+}
+.result-poptit .close:hover {
+    color:#444;
+}
+.rform {
+    padding:55px 10px 20px 20px;
+    text-align: center;
+}
+.rform span {
+    color: red;
+    font-size: 18px;
+}

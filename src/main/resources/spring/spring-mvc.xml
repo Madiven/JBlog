@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+     <!--
+             对与注解的Handler，可以单个配置
+             实际开发中建议使用组件扫描
+       <bean class="com.devin.controller.ItemsController3"></bean>
+     -->
+       <!--
+       可以扫描controller、service、。。。。。。
+       -->
+	<!--<context:annotation-config />-->
+	<!-- 它背后注册了很多用于解析注解的处理器,其中就包括<context:annotation-config/>配置的注解所使用的处理器 -->
+	<!-- 所以配置了<context:component-scan base-package="">之后,便无需再配置<context:annotation-config> -->
+	<context:component-scan base-package="com.jblog.controller" />
+	<!-- 默认访问跳转到登录页面(即定义无需Controller的url<->view直接映射) -->
+	<!--<mvc:view-controller path="/" view-name="forward:login"/>-->
+	<!--对进入DispatcherServlet的URL进行筛查，如果发现是静态资源的请求，
+	就将该请求转由Web应用服务器默认的Servlet处理，如果不是静态资源的请求，
+	才由DispatcherServlet继续处理-->
+	<mvc:default-servlet-handler />
+	<context:property-placeholder location="classpath:save.properties" />
+	<mvc:resources  mapping="/ueditor/upload/**" location= "file:${ueditor.imagePath}ueditor/upload/" />
+	<mvc:resources  mapping="/blogger_image/**" location= "file:${blogger.imagePath}/" />
+	<!-- 启用SpringMVC的注解功能,它会自动注册HandlerMapping、HandlerAdapter、ExceptionResolver的相关实例 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+    <!-- 静态资源解析，包括js,css,img... -->
+	<!-- 由于web.xml中设置是：由SpringMVC拦截所有请求,于是在读取静态资源文件的时候就会受到影响(说白了就是读不到) -->
+	<!-- 经过下面的配置，该标签的作用就是：所有页面中引用"/js/**"的资源，都会从"/resources/js/"里面进行查找 -->
+	<!-- 我们可以访问http://IP:8080/xxx/js/my.css和http://IP:8080/xxx/resources/js/my.css对比出来 -->
+    <!--<mvc:resources location="/static/" mapping="/static/**"/>&lt;!&ndash;http://localhost:8080/jblog/&ndash;&gt;-->
+	<!--<mvc:resources location="/WEB-INF/" mapping="/WEB-INF/**" />-->
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<property name="prefix" value="/static/ueditor1_4_3_3/jsp/"></property>-->
+		<!--<property name="viewNames" value="*.jsp" />-->
+        <!--<property name="suffix" value=""></property>-->
+        <!--<property name="order" value="1"/>-->
+    <!--</bean>-->
+
+    <!-- FreeMarker视图解析器     默认视图 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+		<property name="contentType" value="text/html; charset=utf-8"/>
+		<property name="requestContextAttribute" value="request"/>
+		<property name="cache" value="false"/>
+		<!--<property name="viewNames" value="*.ftl" />-->
+		<!-- 配置文件类型，freemaker文件类型标准是ftl -->
+		<property name="suffix" value=".ftl"/>
+		<!-- 如果有多种解析器，添加这一行，让freemaker解析器优先 -->
+		<!--<property name="order" value="0"/>-->
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<!-- 模板文件的存放路径 -->
+		<property name="templateLoaderPath" value="/WEB-INF/view/"/>
+		<!-- 如果使用freemaker的自定义标签，这里需要这一段配置
+		<property name="freemarkerVariables">
+			<map>
+				这里配置的是自定义标签，有多个也一起在这里配置
+				<entry key="shiro" value-ref="shiroTag" />
+			</map>
+		</property>
+		 -->
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="numberFormat">0.##</prop>
+				<!-- 模板更新间隔，开发时设置为1，项目工作时建议设置为较大数字 -->
+				<prop key="template_update_delay">1</prop>
+			</props>
+		</property>
+	</bean>
+	<!--  使用自定义标签还需要自定义标签的bean-->
+	<!--<bean id="shiroTag" class="XXX.XXX.shiroTag"></bean>-->
+
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="102400000" />
+	</bean>
+
+	<!-- SpringMVC在超出上传文件限制时，会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->
+	<!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的，而且此时还没有进入到Controller方法中 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<!-- 遇到MaxUploadSizeExceededException异常时，自动跳转到/WEB-INF/error_fileupload.jsp页面 -->
+				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">WEB-INF/error_fileupload</prop>
+				<!-- 处理其它异常(包括Controller抛出的) -->
+				<prop key="java.lang.Throwable">WEB-INF/500</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jblog.dao.BlogTypeDao">
+
+    <resultMap type="BlogType" id="BlogTypeResult">
+        <id property="id" column="id"/>
+        <result property="typeName" column="typeName"/>
+        <result property="orderNum" column="orderNum"/>
+        <result property="show" column="isShow"/>
+    </resultMap>
+
+    <resultMap type="BlogTypeVO" id="BlogTypeVOResult">
+        <id property="id" column="id"/>
+        <result property="typeName" column="typeName"/>
+        <result property="orderNum" column="orderNum"/>
+        <result property="blogCount" column="blogCount"/>
+        <result property="show" column="isShow"/>
+    </resultMap>
+
+    <select id="listBlogType" resultMap="BlogTypeResult">
+        SELECT * FROM t_blogtype ORDER BY ordernum DESC
+    </select>
+
+    <select id="findById" parameterType="Integer" resultMap="BlogTypeResult">
+        SELECT * FROM t_blogtype WHERE id=#{id}
+    </select>
+
+    <select id="getCountByTypeName" parameterType="String" resultType="Integer">
+        SELECT count(*) FROM t_blogtype WHERE typeName=#{typeName}
+    </select>
+
+    <insert id="addBlogType" parameterType="BlogType" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_blogtype VALUES(null,#{typeName},#{orderNum},#{show})
+    </insert>
+
+    <delete id="deleteBlogType" parameterType="Integer">
+        delete from t_blogtype where id=#{id}
+    </delete>
+
+    <update id="updateBlogType" parameterType="BlogType">
+        update t_blogtype
+        <set>
+            <if test="typeName!=null and typeName!=''">
+                typeName=#{typeName},
+            </if>
+            <if test="orderNum!=null and orderNum!=''">
+                orderNum=#{orderNum},
+            </if>
+            <if test="show!=null">
+                isshow=#{show},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getCount" resultMap="BlogTypeVOResult">
+        SELECT
+        t2.id,t2.typeName, COUNT(t1.id) AS blogCount
+        FROM
+        t_blog t1
+        RIGHT JOIN t_blogtype t2
+        ON t1.type_id = t2.id
+        AND t1.isShow = 1
+        GROUP BY t2.typeName
+        ORDER BY t2.orderNum
+    </select>
+
+</mapper>

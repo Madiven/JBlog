@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jblog.dao.BlogDao">
+
+    <resultMap type="Blog" id="BlogResult">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="type" column="blogType"/>
+        <result property="summary" column="summary"/>
+        <result property="releaseDate" column="releaseDate"/>
+        <result property="readCount" column="readCount"/>
+        <result property="commentCount" column="commentCount"/>
+        <result property="content" column="content"/>
+        <result property="contentNoTag" column="contentNoTag"/>
+        <result property="keyWord" column="keyWord"/>
+        <result property="show" column="isShow" />
+        <result property="reply" column="isReply" />
+        <result property="commend" column="isCommend" />
+        <association property="blogType" column="type_id" select="com.jblog.dao.BlogTypeDao.findById" />
+    </resultMap>
+
+    <resultMap type="Blog" id="SimpleBlogResult">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="readCount" column="readCount"/>
+    </resultMap>
+
+    <resultMap id="CountResult" type="java.util.HashMap">
+        <result property="key" column="blogtype" />
+        <result property="value" column="qty" />
+    </resultMap>
+
+    <resultMap id="RecordResult" type="java.util.HashMap">
+        <result property="key" column="strReleaseDate" />
+        <result property="value" column="blogCount" />
+    </resultMap>
+
+    <select id="getCount" resultMap="CountResult">
+        select * from
+        (select distinct blogtype,count(t1.id) as qty from
+        t_blog t1,t_blogtype t2
+        where t1.type_id=t2.id
+        and t1.isshow = 1
+        and t2.isshow = 1
+		group by blogtype) t
+        where t.blogtype is not null
+    </select>
+
+    <select id="getCurrent" resultMap="SimpleBlogResult">
+        SELECT id,title FROM t_blog where isShow = 1 ORDER BY releaseDate DESC LIMIT 0,10
+    </select>
+
+    <select id="getRecord" resultMap="RecordResult">
+        SELECT
+        DATE_FORMAT(releaseDate,'%Y年%m月') AS strReleaseDate,
+        COUNT(*) AS blogCount
+        FROM
+        t_blog
+        WHERE isShow = 1
+        GROUP BY strReleaseDate
+        ORDER BY releaseDate DESC
+    </select>
+
+    <select id="getTopReadCount" resultMap="SimpleBlogResult">
+        SELECT id,title,readCount from t_blog where isShow = 1 ORDER BY readCount DESC LIMIT 0,10
+    </select>
+
+    <select id="getRecommendArticles" resultMap="BlogResult">
+        SELECT * from t_blog where isCommend = 1 and isShow = 1 ORDER BY releaseDate DESC
+    </select>
+
+    <select id="getArticlesByType"  resultMap="BlogResult">
+        SELECT * FROM t_blog where type_id=#{typeId} and isShow = 1 ORDER BY releaseDate DESC
+    </select>
+
+    <select id="getArticlesByDate"  resultMap="BlogResult">
+        SELECT * FROM t_blog where DATE_FORMAT(releaseDate,'%Y%m')=#{strReleaseDate} and isShow = 1 ORDER BY releaseDate DESC
+    </select>
+
+    <select id="getPrevBlog" parameterType="Integer" resultMap="SimpleBlogResult">
+        SELECT id,title FROM t_blog WHERE id&lt;#{id} ORDER BY id DESC LIMIT 1
+    </select>
+
+    <select id="getNextBlog" parameterType="Integer" resultMap="SimpleBlogResult">
+        SELECT id,title FROM t_blog WHERE id&gt;#{id} ORDER BY id ASC LIMIT 1
+    </select>
+
+    <select id="getByBlogType" resultMap="BlogResult">
+        select * from t_blog where type_id=#{typeId}
+    </select>
+
+    <update id="updateReadCount">
+        update t_blog set readcount = readcount + 1 where id = #{id}
+    </update>
+
+    <update id="increaseCommentCount">
+        update t_blog set commentcount=commentcount + 1 where id = (select blog_id from t_comment where id=#{id})
+    </update>
+
+    <update id="decreaseCommentCount">
+        update t_blog set commentcount=commentcount - 1 where id = (select blog_id from t_comment where state=1 and id=#{id})
+    </update>
+
+    <select id="listBlog" resultMap="BlogResult">
+        SELECT * FROM t_blog ORDER BY releaseDate DESC
+    </select>
+
+    <select id="findById" parameterType="Integer" resultMap="BlogResult">
+        SELECT * FROM t_blog WHERE id=#{id}
+    </select>
+
+    <select id="searchBlogByTitle" parameterType="String" resultMap="BlogResult">
+        SELECT * FROM t_blog WHERE title like CONCAT(CONCAT('%', #{title}), '%')
+    </select>
+
+    <select id="getTitleById" parameterType="Integer" resultMap="BlogResult">
+        SELECT id,title,commentCount FROM t_blog WHERE id=#{id}
+    </select>
+
+    <update id="update" parameterType="Blog">
+        update t_blog
+        <set>
+            <if test="title!=null and title!=''">
+                title=#{title},
+            </if>
+            <if test="type!=null and type!=''">
+                blogType=#{type},
+            </if>
+            <if test="summary!=null and summary!=''">
+                summary=#{summary},
+            </if>
+            <if test="content!=null and content!=''">
+                content=#{content},
+            </if>
+            <if test="blogType.id!=null">
+                type_id=#{blogType.id},
+            </if>
+            <if test="readCount!=null">
+                readCount=#{readCount},
+            </if>
+            <if test="commentCount!=null">
+                commentCount=#{commentCount},
+            </if>
+            <if test="keyWord!=null and keyWord!=''">
+                keyWord=#{keyWord},
+            </if>
+            <if test="show!=null">
+                isShow=#{show},
+            </if>
+            <if test="reply!=null">
+                isReply=#{reply},
+            </if>
+            <if test="commend!=null">
+                isCommend=#{commend},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <insert id="addBlog" parameterType="Blog" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_blog VALUES(null,#{title},#{summary},now(),0,0,#{content},#{keyWord},#{type},#{show},#{reply},#{commend},#{blogType.id})
+    </insert>
+
+    <delete id="deleteBlog" parameterType="Integer">
+        delete from t_blog where id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="getCountByBlogType" parameterType="Integer" resultType="Integer">
+        select count(*) from t_blog where type_id=#{typeId}
+    </select>
+
+</mapper>
